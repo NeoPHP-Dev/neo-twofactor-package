@@ -1,0 +1,36 @@
+{#
+    Reusable 2FA setup component — QR code + confirmation code input.
+    Fully generic: only ships minimal markup, styled via CSS custom
+    properties (--tf-*), overridable from the host project.
+
+    Usage:
+    {% import '@TwoFactor/components/TwoFactorSetup.macro.html.twig' as TwoFactor %}
+    {{ TwoFactor.setup(qrCodeUrl, secret, confirmUrl) }}
+#}
+
+{% macro setup(qrCodeUrl, secret, confirmUrl, instanceId = 'tf') %}
+    <div class="tf-setup" id="{{ instanceId }}-setup">
+        <div class="tf-setup-qr">
+            <img src="{{ qrCodeUrl }}" alt="Two-factor QR code" class="tf-qr-image">
+        </div>
+
+        <p class="tf-setup-hint">Scan this QR code with your authenticator app, or enter the code manually:</p>
+        <code class="tf-secret-fallback">{{ secret }}</code>
+
+        <form method="post" action="{{ confirmUrl }}" class="tf-setup-form">
+            <label for="{{ instanceId }}-code" class="tf-label">Confirmation code</label>
+            <input
+                    type="text"
+                    id="{{ instanceId }}-code"
+                    name="code"
+                    class="tf-code-input"
+                    inputmode="numeric"
+                    pattern="[0-9]{6}"
+                    maxlength="6"
+                    autocomplete="one-time-code"
+                    required
+            >
+            <button type="submit" class="tf-submit-btn">Activate</button>
+        </form>
+    </div>
+{% endmacro %}
