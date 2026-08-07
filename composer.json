@@ -1,0 +1,15 @@
+{
+    "name": "neophp/twofactor-package",
+    "description": "TOTP two-factor authentication toolkit for NeoPHP, usable with any auth system",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vendor\\NeoPHP\\TwoFactorPackage\\": "src/",
+            "Vendor\\NeoPHP\\TwoFactorPackage\\Database\\": "database/"
+        }
+    }
+}
