@@ -1,0 +1,29 @@
+{#
+    Reusable 2FA verification component — single code input, used at login.
+
+    Usage:
+    {% import '@TwoFactor/components/TwoFactorVerify.macro.html.twig' as TwoFactor %}
+    {{ TwoFactor.verify(verifyUrl) }}
+#}
+{% macro verify(verifyUrl, instanceId = 'tf', error = null) %}
+    <form method="post" action="{{ verifyUrl }}" class="tf-verify-form" id="{{ instanceId }}-verify">
+        {% if error %}
+            <p class="tf-error">{{ error }}</p>
+        {% endif %}
+
+        <label for="{{ instanceId }}-verify-code" class="tf-label">Enter your 6-digit code</label>
+        <input
+                type="text"
+                id="{{ instanceId }}-verify-code"
+                name="code"
+                class="tf-code-input"
+                inputmode="numeric"
+                pattern="[0-9]{6}"
+                maxlength="6"
+                autocomplete="one-time-code"
+                autofocus
+                required
+        >
+        <button type="submit" class="tf-submit-btn">Verify</button>
+    </form>
+{% endmacro %}
