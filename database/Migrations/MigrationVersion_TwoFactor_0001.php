@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Neo\Core\Database\DatabaseManager;
 use Neo\Core\Database\Migration\Interface\MigrationInterface;
 
-final class MigrationVersion_TwoFactor_1 implements MigrationInterface
+final class MigrationVersion_TwoFactor_0001 implements MigrationInterface
 {
     public function up(DatabaseManager $db): void
     {
