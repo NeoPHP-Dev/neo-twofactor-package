@@ -1,0 +1,105 @@
+.tf-setup, .tf-verify-form {
+    --tf-bg: #ffffff;
+    --tf-border: #e8eaed;
+    --tf-text: #16181d;
+    --tf-text-muted: #6b7280;
+    --tf-accent: #5b5fef;
+    --tf-accent-hover: #4c50e0;
+    --tf-danger: #e5484d;
+    --tf-danger-bg: #fef2f2;
+    --tf-radius: 10px;
+
+    max-width: 360px;
+    font-family: inherit;
+    color: var(--tf-text);
+}
+
+.tf-setup * , .tf-verify-form * { box-sizing: border-box; }
+
+.tf-setup-qr {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    background: var(--tf-bg);
+    border: 1px solid var(--tf-border);
+    border-radius: var(--tf-radius);
+    margin-bottom: 1rem;
+}
+
+.tf-qr-image {
+    width: 180px;
+    height: 180px;
+    display: block;
+}
+
+.tf-setup-hint {
+    font-size: 0.82rem;
+    color: var(--tf-text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.tf-secret-fallback {
+    display: block;
+    padding: 0.6rem 0.8rem;
+    background: var(--tf-bg);
+    border: 1px dashed var(--tf-border);
+    border-radius: 6px;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-align: center;
+    margin-bottom: 1.25rem;
+    color: var(--tf-text);
+}
+
+.tf-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--tf-text-muted);
+    margin-bottom: 0.4rem;
+}
+
+.tf-code-input {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid var(--tf-border);
+    border-radius: 8px;
+    font-size: 1.1rem;
+    letter-spacing: 0.3em;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    outline: none;
+    margin-bottom: 1rem;
+    transition: border-color 0.15s;
+}
+
+.tf-code-input:focus {
+    border-color: var(--tf-accent);
+}
+
+.tf-submit-btn {
+    width: 100%;
+    padding: 0.7rem;
+    background: var(--tf-accent);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.tf-submit-btn:hover {
+    background: var(--tf-accent-hover);
+}
+
+.tf-error {
+    background: var(--tf-danger-bg);
+    border: 1px solid var(--tf-danger);
+    color: var(--tf-danger);
+    font-size: 0.82rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
