@@ -1,0 +1,14 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    uses: NeoPHP-Dev/NeoPHP/.github/workflows/package-release.yml@main
+    secrets: inherit
