@@ -10,6 +10,9 @@ use Vendor\NeoPHP\TwoFactorPackage\Database\Repository\TwoFactorSecretRepository
 
 final class TwoFactorManager
 {
+    /** @var list<array{action: 'confirm'|'verify', userType: string, userId: int, success: bool, reason: string|null}> */
+    private static array $checks = [];
+
     public function __construct(
         private readonly EntityManager $em,
         private readonly TotpManager $totp,
@@ -41,12 +44,40 @@ final class TwoFactorManager
     {
         $secret = $this->repository()->findForUser($userType, $userId);
 
-        if ($secret === null || !$this->totp->verify($secret->getSecret(), $code)) {
+        if ($secret === null) {
+            self::$checks[] = [
+                'action' => 'confirm',
+                'userType' => $userType,
+                'userId' => $userId,
+                'success' => false,
+                'reason' => 'No secret set up for this user',
+            ];
+
+            return false;
+        }
+
+        if (!$this->totp->verify($secret->getSecret(), $code)) {
+            self::$checks[] = [
+                'action' => 'confirm',
+                'userType' => $userType,
+                'userId' => $userId,
+                'success' => false,
+                'reason' => 'Invalid TOTP code',
+            ];
+
             return false;
         }
 
         $secret->enable();
         $this->em->flush();
+
+        self::$checks[] = [
+            'action' => 'confirm',
+            'userType' => $userType,
+            'userId' => $userId,
+            'success' => true,
+            'reason' => null,
+        ];
 
         return true;
     }
@@ -56,10 +87,28 @@ final class TwoFactorManager
         $secret = $this->repository()->findForUser($userType, $userId);
 
         if ($secret === null || !$secret->isEnabled()) {
+            self::$checks[] = [
+                'action' => 'verify',
+                'userType' => $userType,
+                'userId' => $userId,
+                'success' => false,
+                'reason' => $secret === null ? 'No secret set up for this user' : 'Two-factor not enabled for this user',
+            ];
+
             return false;
         }
 
-        return $this->totp->verify($secret->getSecret(), $code);
+        $success = $this->totp->verify($secret->getSecret(), $code);
+
+        self::$checks[] = [
+            'action' => 'verify',
+            'userType' => $userType,
+            'userId' => $userId,
+            'success' => $success,
+            'reason' => $success ? null : 'Invalid TOTP code',
+        ];
+
+        return $success;
     }
 
     public function disableFor(string $userType, int $userId): void
@@ -89,5 +138,13 @@ final class TwoFactorManager
         $repo = $this->em->getRepository(TwoFactorSecret::class);
 
         return $repo;
+    }
+
+    /**
+     * @return list<array{action: 'confirm'|'verify', userType: string, userId: int, success: bool, reason: string|null}>
+     */
+    public static function getChecks(): array
+    {
+        return self::$checks;
     }
 }
